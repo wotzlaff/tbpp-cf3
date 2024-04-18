@@ -2,37 +2,18 @@
 
 This repository contains compact models for the Temporal Bin Packing Problem with Fire-Ups.
 The problem was introduced in [[1]](#1).
-Some improvements for the basic models were proposed in [[2]](#2).
-A preliminary version of a paper explaining the implemented models can be found in [[3]](#3).
-
-The models in this repository are improved even more. A description of the improvements will be published soon.
+Some improvements for the basic models were proposed in [[2]](#2) and [[3]](#3) (cf. the repository [tbpp-cf2](https://github.com/wotzlaff/tbpp-cf2)).
+A preliminary version of a paper explaining the implemented models can be found in [[4]](#4).
 
 ## Examples
 
-You can find two example files in the `examples` directory.
+Example files are contained in the `examples` directory.
 
 ## Installation
 
-The file `environment.yml` contains a description of all required packages.
-You can create a clean conda environment from this file using
-
 ```
-conda env create
+pip install .
 ```
-
-and activate it using
-
-```
-conda activate grb
-```
-
-Afterwards, use
-
-```
-conda develop .
-```
-
-to setup a link to the `tbpp_cf2` package such that it can be loaded easily.
 
 ## Data of Benchmark Instances
 
@@ -48,3 +29,8 @@ Martinovic, J., Strasdat, N., & Selch, M. (2021). [Compact integer linear progra
 
 <a id="3">[3]</a>
 Martinovic, J., Strasdat, N., Valério de Carvalho, J., & Furini, F. (2022). [Variable and constraint reduction techniques for the temporal bin packing problem with fire-ups](https://doi.org/10.1007/s11590-021-01825-x). Optimization Letters, 1-26. 
+
+<a id="4">[4]</a>
+Martinovic, J. & Strasdat, N. (2022). Theoretical Insights and a New Class of Valid Inequalities
+for the Temporal Bin Packing Problem with Fire-Ups. Preprint MATH-NM-01-2022, Technische
+Universität Dresden (available online: [here](https://optimization-online.org/?p=18679))

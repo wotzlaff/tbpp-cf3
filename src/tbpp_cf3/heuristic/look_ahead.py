@@ -1,4 +1,3 @@
-import dataclasses
 from typing import Collection
 from .. import InstanceTBPP
 
@@ -13,15 +12,8 @@ def best_fit_part(bins: list[Pattern], inst: InstanceTBPP, jobs: list[int]):
     for i in jobs:
         ci = inst.c[i]
         si = inst.s[i]
-        bins_cap = [
-            sum(inst.c[j] for j in b if inst.e[j] > si)
-            for b in bins
-        ]
-        possible = [
-            idx
-            for idx, cap in enumerate(bins_cap)
-            if cap + ci <= inst.cap
-        ]
+        bins_cap = [sum(inst.c[j] for j in b if inst.e[j] > si) for b in bins]
+        possible = [idx for idx, cap in enumerate(bins_cap) if cap + ci <= inst.cap]
         if len(possible) == 0:
             bins.append(frozenset({i}))
         else:
@@ -30,7 +22,9 @@ def best_fit_part(bins: list[Pattern], inst: InstanceTBPP, jobs: list[int]):
     return bins
 
 
-def look_ahead_part(bins: list[Pattern], inst: InstanceTBPP, jobs: list[int], recursion: int = 0) -> tuple[Allocation, Allocation]:
+def look_ahead_part(
+    bins: list[Pattern], inst: InstanceTBPP, jobs: list[int], recursion: int = 0
+) -> tuple[Allocation, Allocation]:
     def _compute_value(alloc: Allocation):
         return inst.compute_value(alloc)
 
@@ -43,15 +37,8 @@ def look_ahead_part(bins: list[Pattern], inst: InstanceTBPP, jobs: list[int], re
 
     ci = inst.c[i]
     si = inst.s[i]
-    bins_cap = [
-        sum(inst.c[j] for j in b if inst.e[j] > si)
-        for b in bins
-    ]
-    possible = [
-        idx
-        for idx, cap in enumerate(bins_cap)
-        if cap + ci <= inst.cap
-    ]
+    bins_cap = [sum(inst.c[j] for j in b if inst.e[j] > si) for b in bins]
+    possible = [idx for idx, cap in enumerate(bins_cap) if cap + ci <= inst.cap]
     possible.append(len(bins))
 
     allocs = []
@@ -63,15 +50,11 @@ def look_ahead_part(bins: list[Pattern], inst: InstanceTBPP, jobs: list[int], re
             b = new_bins[idx]
             new_bins[idx] = b | {i}
         if recursion > 0:
-            _, final_alloc = look_ahead_part(
-                new_bins, inst, rem_jobs, recursion-1
-            )
+            _, final_alloc = look_ahead_part(new_bins, inst, rem_jobs, recursion - 1)
         else:
             final_alloc = best_fit_part(new_bins, inst, rem_jobs)
         allocs.append((new_bins, final_alloc))
-    best_alloc, final_alloc = min(
-        allocs, key=lambda alls: _compute_value(alls[1])
-    )
+    best_alloc, final_alloc = min(allocs, key=lambda alls: _compute_value(alls[1]))
 
     return best_alloc, final_alloc
 
@@ -79,13 +62,13 @@ def look_ahead_part(bins: list[Pattern], inst: InstanceTBPP, jobs: list[int], re
 def look_ahead(inst: InstanceTBPP, future: int = 1, recursion: int = 0):
     alloc: Allocation = []
     for i in range(inst.n):
-        pending_jobs = list(range(i, min(inst.n, i+1+future)))
+        pending_jobs = list(range(i, min(inst.n, i + 1 + future)))
         alloc = look_ahead_part(alloc, inst, pending_jobs, recursion)[0]
     return alloc
 
 
 def best_look_ahead(inst: InstanceTBPP, futures: Collection[int]):
-    return min((
-        look_ahead(inst, future)
-        for future in futures
-    ), key=lambda alloc: inst.compute_value(alloc))
+    return min(
+        (look_ahead(inst, future) for future in futures),
+        key=lambda alloc: inst.compute_value(alloc),
+    )

@@ -10,7 +10,7 @@ def read_file(f):
     lines = open(f).read().split('\n')
     n, cap, taus = [int(v) for v in lines[0].split('\t')]
     c = [int(ci) for ci in lines[1:][:n]]
-    rem = lines[3+n:]
+    rem = lines[3 + n :]
     s = [-1] * n
     e = [-1] * n
     active = set()

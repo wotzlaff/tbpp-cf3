@@ -1,6 +1,6 @@
 import math
 import time
-import tbpp_cf2
+import tbpp_cf3
 import gurobipy as gp
 
 
@@ -14,8 +14,8 @@ def read_bounds():
 
 
 def main():
-    root = './data/TestInstances'
-    groups = tbpp_cf2.data.format1.get_groups(root)
+    root = './data/tbpp-instances/data/a1'
+    groups = tbpp_cf3.data.format1.get_groups(root)
 
     lb_servers_dict = read_bounds()
     gamma = 1.0
@@ -27,32 +27,29 @@ def main():
 
     for n, t, cat in groups:
         group_name = f'n{n} t{t} {cat}'
-        for inst_name, inst in tbpp_cf2.data.format1.read_instances(root, group_name):
+        for inst_name, inst in tbpp_cf3.data.format1.read_instances(root, group_name):
             # lift instance
-            inst = tbpp_cf2.lift(inst).sorted()
-            inst = tbpp_cf2.InstanceTBPPFU.extend(inst, gamma=gamma)
+            inst = tbpp_cf3.lift(inst).sorted()
+            inst = tbpp_cf3.InstanceTBPPFU.extend(inst, gamma=gamma)
 
             # apply heuristic
-            alloc = tbpp_cf2.heuristic.best_look_ahead(
+            alloc = tbpp_cf3.heuristic.best_look_ahead(
                 inst, {1, 2, 3, 5, 10, 20, inst.n // 4, inst.n // 2, inst.n}
             )
             vheu = inst.compute_value(alloc)
-            ub_servers = int(
-                math.ceil(round(vheu) / (1.0 + inst.gamma) - 1e-8))
+            ub_servers = int(math.ceil(round(vheu) / (1.0 + inst.gamma) - 1e-8))
             lb_servers = lb_servers_dict[inst_name]
             print(
-                f'''
+                f"""
 {inst_name}
 heuristic value = {vheu:.0f}
 minimal server count = {lb_servers}
-maximal server count = {ub_servers}'''
+maximal server count = {ub_servers}"""
             )
 
             # build and solve compact model
             for model_name, build in [
-                ('model1', tbpp_cf2.model1.build),
-                ('model2', tbpp_cf2.model2.build),
-                ('model3', tbpp_cf2.model3.build),
+                ('model1', tbpp_cf3.model1.build),
             ]:
                 t0 = time.time()
                 model = build(
