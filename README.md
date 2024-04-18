@@ -1,4 +1,4 @@
-# Compact Models for the Temporal Bin Packing Problem with Fire-Ups
+# Compact Models for the Temporal Bin Packing Problem with Fire-Ups (V3)
 
 This repository contains compact models for the Temporal Bin Packing Problem with Fire-Ups.
 The problem was introduced in [[1]](#1).
@@ -31,6 +31,6 @@ Martinovic, J., Strasdat, N., & Selch, M. (2021). [Compact integer linear progra
 Martinovic, J., Strasdat, N., Valério de Carvalho, J., & Furini, F. (2022). [Variable and constraint reduction techniques for the temporal bin packing problem with fire-ups](https://doi.org/10.1007/s11590-021-01825-x). Optimization Letters, 1-26. 
 
 <a id="4">[4]</a>
-Martinovic, J. & Strasdat, N. (2022). Theoretical Insights and a New Class of Valid Inequalities
-for the Temporal Bin Packing Problem with Fire-Ups. Preprint MATH-NM-01-2022, Technische
-Universität Dresden (available online: [here](https://optimization-online.org/?p=18679))
+Martinovic, J. & Strasdat, N. (2022). [Theoretical Insights and a New Class of Valid Inequalities
+for the Temporal Bin Packing Problem with Fire-Ups](https://optimization-online.org/?p=18679). Preprint MATH-NM-01-2022, Technische
+Universität Dresden
