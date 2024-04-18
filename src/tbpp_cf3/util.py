@@ -73,5 +73,5 @@ def solve_bpps(inst: InstanceTBPP):
         model = bpp.build(inst_bpp)
         model.setParam('OutputFlag', 0)
         model.optimize()
-        bounds[t] = int(model.ObjVal + 0.5)
+        bounds[t] = round(model.ObjVal)
     return bounds

@@ -28,9 +28,9 @@ def main():
             ),
         ),
     ]
-    os.makedirs('./logs/mip', exist_ok=True)
+    os.makedirs('./logs/mip_r', exist_ok=True)
 
-    root = './data/tbpp-instances/data/a1'
+    root = './data/tbpp-instances/data/a1r'
     groups = tbpp_cf3.data.format1.get_groups(root)
 
     lb_servers_dict = read_bounds()
@@ -42,9 +42,9 @@ def main():
         print(group_name)
         for model_name, build in models:
             print(model_name)
-            log_path = f'./logs/mip/{group_name}_{model_name}.log'
-            # if os.path.exists(log_path):
-            #     continue
+            log_path = f'./logs/mip_r/{group_name}_{model_name}.log'
+            if os.path.exists(log_path):
+                continue
             with open(log_path, 'w') as fout:
                 fout.write(
                     'name\tNumVars\tNumConstrs\tNumNZs\tdt_model\tdt_solve\tdt_relax\tm.ObjVal\tmrel.ObjVal\toptimal\tservers\tstartups\n'
@@ -55,11 +55,14 @@ def main():
                     root, group_name
                 ):
                     print(inst_name)
+                    inst_name_base = '_'.join(inst_name[:-4].split('_')[:5]) + '.txt'
+                    if inst_name_base == inst_name:
+                        continue
 
                     # lift instance
                     inst = tbpp_cf3.lift(inst).sorted()
                     inst = tbpp_cf3.InstanceTBPPFU.extend(inst, gamma=gamma)
-                    lb_servers = lb_servers_dict[inst_name]
+                    lb_servers = lb_servers_dict[inst_name_base]
                     alloc = tbpp_cf3.heuristic.best_look_ahead(
                         inst, {1, 2, 3, 5, 10, 20, inst.n // 4, inst.n // 2, inst.n}
                     )
